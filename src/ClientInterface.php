@@ -6,7 +6,6 @@
 
 namespace Mpx;
 
-use GuzzleHttp\Collection;
 use GuzzleHttp\Message\Response;
 
 interface ClientInterface {
@@ -41,5 +40,13 @@ interface ClientInterface {
    *   The parsed response body.
    */
   public function parseBody(Response $response, $format = '');
+
+  /**
+   * Gets the default configuration.
+   *
+   * @return array
+   *   The defaults array.
+   */
+  public function getDefaults();
 
 }

@@ -71,4 +71,11 @@ class Client implements ClientInterface {
     throw new MpxException('Custom formats are not supported.');
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getDefaults() {
+    return $this->defaults;
+  }
+
 }
