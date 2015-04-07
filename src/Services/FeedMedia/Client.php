@@ -7,7 +7,6 @@
 namespace Mpx\Services\FeedMedia;
 
 use GuzzleHttp\Query;
-use GuzzleHttp\Url;
 use Mpx\MpxException;
 use Mpx\ClientInterface as MpxClientInterface;
 use Pimple\Container;

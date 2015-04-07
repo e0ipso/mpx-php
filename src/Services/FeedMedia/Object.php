@@ -8,6 +8,6 @@
 namespace Mpx\Services\FeedMedia;
 
 
-class Object {
+class Object implements ObjectInterface {
 
 }
