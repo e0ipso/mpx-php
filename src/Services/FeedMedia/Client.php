@@ -175,6 +175,9 @@ class Client implements ClientInterface {
    * {@inheritdoc}
    */
   public function count(array $options = array()) {
+    if ($this->ids || $this->guids) {
+      throw new MpxException('You cannot add IDs or GUIDs to count query.');
+    }
     $options += array('query' => $this->queryParams);
     $options['query']->add('entries', FALSE);
     $options['query']->add('count', TRUE);

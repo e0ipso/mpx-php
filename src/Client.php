@@ -52,14 +52,21 @@ class Client implements ClientInterface {
    * {@inheritdoc}
    */
   public function parseBody(Response $response, $format = '') {
+    $output = NULL;
     if (empty($format)) {
       $format = isset($this->defaults['form']) ? $this->defaults['form'] : NULL;
     }
     if ($format == $this::FORMAT_JSON || $format == $this::FORMAT_CJSON) {
-      return $response->json();
+      $output = $response->json();
     }
     if ($format == $this::FORMAT_ATOM || $format == $this::FORMAT_RSS) {
-      return $response->xml();
+      $output = $response->xml();
+    }
+    if ($output['isException']) {
+      throw new MpxException(sprintf('Exception returned: %s', print_r($output, TRUE)));
+    }
+    if ($output) {
+      return $output;
     }
     throw new MpxException('Custom formats are not supported.');
   }
