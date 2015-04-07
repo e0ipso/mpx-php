@@ -10,16 +10,16 @@ namespace Mpx\Services\FeedMedia;
 
 use GuzzleHttp\Collection;
 
-class FeedMediaConfig extends Collection {
+class Config extends Collection {
 
   /**
-   * Creates FeedMediaConfig from a config array.
+   * Creates Config from a config array.
    *
    * @param array $config
    *   Keyed array with the configuration parameters.
    *
    * @return static
-   *   The FeedMediaConfig instance.
+   *   The Config instance.
    */
   public static function createFromConfig(array $config) {
     $defaults = array(

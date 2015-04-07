@@ -6,6 +6,7 @@
 
 namespace Mpx\Services\FeedMedia;
 
+use Mpx\MpxException;
 use Pimple\Container;
 
 interface ClientInterface {
@@ -41,5 +42,16 @@ interface ClientInterface {
    * @return int
    */
   public function count(array $options = array());
+
+  /**
+   * Builds the path to request based on the internal parameters.
+   *
+   * @throws MpxException
+   *   For incompatible options.
+   *
+   * @return string
+   *   The path.
+   */
+  public function buildPath();
 
 }

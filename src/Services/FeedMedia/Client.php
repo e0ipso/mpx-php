@@ -142,7 +142,7 @@ class Client implements ClientInterface {
    * {@inheritdoc}
    */
   public static function create(Container $container) {
-    /** @var FeedMediaConfig $feed_config */
+    /** @var Config $feed_config */
     $feed_config = $container['feed_config'];
     $feed_type = $feed_config['feed_type'] ? $feed_config['feed_type'] : NULL;
     $feed = $feed_config['feed'] ? $feed_config['feed'] : FALSE;
@@ -187,15 +187,9 @@ class Client implements ClientInterface {
   }
 
   /**
-   * Builds the path to request based on the internal parameters.
-   *
-   * @throws MpxException
-   *   For incompatible options.
-   *
-   * @return string
-   *   The path.
+   * {@inheritdoc}
    */
-  protected function buildPath() {
+  public function buildPath() {
     if (!empty($this->ids) && $this->guids) {
       // If there is information about both the IDs and GUIDs, then throw an
       // exception.
