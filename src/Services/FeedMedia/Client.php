@@ -187,9 +187,15 @@ class Client implements ClientInterface {
   }
 
   /**
-   * {@inheritdoc}
+   * Builds the path to request based on the internal parameters.
+   *
+   * @throws MpxException
+   *   For incompatible options.
+   *
+   * @return string
+   *   The path.
    */
-  public function buildPath() {
+  protected function buildPath() {
     if (!empty($this->ids) && $this->guids) {
       // If there is information about both the IDs and GUIDs, then throw an
       // exception.

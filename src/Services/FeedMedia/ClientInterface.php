@@ -43,15 +43,4 @@ interface ClientInterface {
    */
   public function count(array $options = array());
 
-  /**
-   * Builds the path to request based on the internal parameters.
-   *
-   * @throws MpxException
-   *   For incompatible options.
-   *
-   * @return string
-   *   The path.
-   */
-  public function buildPath();
-
 }

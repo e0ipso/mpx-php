@@ -54,7 +54,10 @@ class FeedMediaClientTest extends \PHPUnit_Framework_TestCase {
    * Test build path.
    */
   public function testBuildPath() {
-    $this->assertEquals($this->client->buildPath(), 'HNK2IC/F_jM8Zls30dL/guid/-/2849493');
+    $reflection_object = new \ReflectionObject($this->client);
+    $reflection_method = $reflection_object->getMethod('buildPath');
+    $reflection_method->setAccessible(TRUE);
+    $this->assertEquals($reflection_method->invoke($this->client), 'HNK2IC/F_jM8Zls30dL/guid/-/2849493');
   }
 
 }
