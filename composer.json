@@ -1,0 +1,16 @@
+{
+  "name": "mpx/mpx-php",
+  "description": "MPX client library for PHP.",
+  "minimum-stability": "dev",
+  "license": "GPLv2",
+  "authors": [
+    {
+      "name": "Mateu Aguiló Bosch",
+      "email": "mateu.aguilo.bosch@gmail.com"
+    }
+  ],
+  "require": {
+    "guzzlehttp/guzzle": "~5",
+    "pimple/pimple": "~3"
+  }
+}
