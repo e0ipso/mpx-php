@@ -7,7 +7,6 @@
 
 namespace Mpx\Services\FeedMedia;
 
-
 interface BagInterface {
 
 }

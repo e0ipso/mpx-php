@@ -151,17 +151,23 @@ class Client implements ClientInterface {
   /**
    * {@inheritdoc}
    */
-  public function get() {
-    return $this->client->get($this->buildPath(), $this->queryParams);
+  public function get(array $options = array()) {
+    $options += array('query' => $this->queryParams);
+    $response = $this->client->get($this->buildPath(), $options);
+    return $this->client->parseBody($response);
   }
 
   /**
    * {@inheritdoc}
    */
   public function count() {
-    $result = $this->client->count($this->buildPath(), $this->queryParams);
-    // TODO: See what this actually returns.
-    return $result['elements'];
+    $query_params = $this->queryParams;
+    $query_params->add('entries', FALSE);
+    $query_params->add('count', TRUE);
+    $options = array('query' => $query_params);
+
+    $result = $this->get($options);
+    return $result['totalResults'];
   }
 
   /**

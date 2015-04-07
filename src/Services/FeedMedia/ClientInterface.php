@@ -6,7 +6,6 @@
 
 namespace Mpx\Services\FeedMedia;
 
-
 use Pimple\Container;
 
 interface ClientInterface {
@@ -25,10 +24,13 @@ interface ClientInterface {
   /**
    * Gets the contents of the feed.
    *
+   * @param array $options
+   *   The array of options as provided the the Guzzle client.
+   *
    * @return Object|Bag
    *   An array of results.
    */
-  public function get();
+  public function get(array $options = array());
 
   /**
    * Returns the number of elements for the requested feed

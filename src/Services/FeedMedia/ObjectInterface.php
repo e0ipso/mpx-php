@@ -6,7 +6,6 @@
 
 namespace Mpx\Services\FeedMedia;
 
-
 interface ObjectInterface {
 
 }
