@@ -27,7 +27,7 @@ interface ClientInterface {
    * @param array $options
    *   The array of options as provided the the Guzzle client.
    *
-   * @return Object|Bag
+   * @return array
    *   An array of results.
    */
   public function fetch(array $options = array());
@@ -35,8 +35,11 @@ interface ClientInterface {
   /**
    * Returns the number of elements for the requested feed
    *
+   * @param array $options
+   *   The array of options as provided the the Guzzle client.
+   *
    * @return int
    */
-  public function count();
+  public function count(array $options = array());
 
 }

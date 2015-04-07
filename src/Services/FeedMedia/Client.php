@@ -6,6 +6,8 @@
 
 namespace Mpx\Services\FeedMedia;
 
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Message\Response;
 use GuzzleHttp\Query;
 use Mpx\MpxException;
 use Mpx\ClientInterface as MpxClientInterface;
@@ -123,7 +125,7 @@ class Client implements ClientInterface {
    * @param $guids
    * @param $seoTerms
    */
-  public function __construct(MpxClientInterface $client, $accountPid, $feedPid, $feedType = NULL, $feed = FALSE, $ids = array(), $ownerId = NULL, $guids = array(), $seoTerms = array()) {
+  public function __construct(MpxClientInterface $client, $accountPid, $feedPid, $feedType = NULL, $feed = FALSE, $ids = array(), $ownerId = NULL, $guids = array(), $seoTerms = array(), Query $query_params = NULL) {
     $this->client = $client;
     $this->accountPid = $accountPid;
     $this->feedPid = $feedPid;
@@ -133,19 +135,23 @@ class Client implements ClientInterface {
     $this->ownerId = $ownerId;
     $this->guids = $guids;
     $this->seoTerms = $seoTerms;
+    $this->queryParams = $query_params ? $query_params : new Query();
   }
 
   /**
    * {@inheritdoc}
    */
   public static function create(Container $container) {
-    $feed_type = $container['feed_type'] ? $container['feed_type'] : NULL;
-    $feed = $container['feed'] ? $container['feed'] : FALSE;
-    $ids = $container['ids'] ? $container['ids'] : array();
-    $owner_id = $container['owner_id'] ? $container['owner_id'] : NULL;
-    $guids = $container['guids'] ? $container['guids'] : NULL;
-    $seo_terms = $container['seo_terms'] ? $container['seo_terms'] : NULL;
-    return new static($container['client'], $container['account_pid'], $container['feed_pid'], $feed_type, $feed, $ids, $owner_id, $guids, $seo_terms);
+    /** @var FeedMediaConfig $feed_config */
+    $feed_config = $container['feed_config'];
+    $feed_type = $feed_config['feed_type'] ? $feed_config['feed_type'] : NULL;
+    $feed = $feed_config['feed'] ? $feed_config['feed'] : FALSE;
+    $ids = $feed_config['ids'] ? $feed_config['ids'] : array();
+    $owner_id = $feed_config['owner_id'] ? $feed_config['owner_id'] : NULL;
+    $guids = $feed_config['guids'] ? $feed_config['guids'] : NULL;
+    $seo_terms = $feed_config['seo_terms'] ? $feed_config['seo_terms'] : NULL;
+    $query_params = $feed_config['query_params'] ? $feed_config['query_params'] : new Query();
+    return new static($feed_config['client'], $feed_config['account_pid'], $feed_config['feed_pid'], $feed_type, $feed, $ids, $owner_id, $guids, $seo_terms, $query_params);
   }
 
   /**
@@ -153,18 +159,25 @@ class Client implements ClientInterface {
    */
   public function fetch(array $options = array()) {
     $options += array('query' => $this->queryParams);
-    $response = $this->client->get($this->buildPath(), $options);
-    return $this->client->parseBody($response);
+    try {
+      $response = $this->client->get($this->buildPath(), $options);
+    }
+    catch (RequestException $e) {
+      throw new MpxException(sprintf("Request exception: %s\n%s", $e->getMessage(), print_r($e->getRequest(), TRUE)));
+    }
+    if (!$response instanceof Response) {
+      return NULL;
+    }
+    return $this->client->parseBody($response, $options['query']->get('form'));
   }
 
   /**
    * {@inheritdoc}
    */
-  public function count() {
-    $query_params = $this->queryParams;
-    $query_params->add('entries', FALSE);
-    $query_params->add('count', TRUE);
-    $options = array('query' => $query_params);
+  public function count(array $options = array()) {
+    $options += array('query' => $this->queryParams);
+    $options['query']->add('entries', FALSE);
+    $options['query']->add('count', TRUE);
 
     $result = $this->fetch($options);
     return $result['totalResults'];
@@ -191,8 +204,8 @@ class Client implements ClientInterface {
     $path_parts[] = $this->feed ? 'feed' : NULL;
     $path_parts[] = $this->ids ? implode(',', $this->ids) : NULL;
     if ($this->guids) {
-      $path_parts[] = 'guid/';
-      $path_parts[] = $this->accountPid ? $this->accountPid : '-';
+      $path_parts[] = 'guid';
+      $path_parts[] = $this->ownerId ? $this->ownerId : '-';
       $path_parts[] = implode(',', $this->guids);
     }
     $path_parts[] = $this->seoTerms ? implode(',', $this->seoTerms) : NULL;

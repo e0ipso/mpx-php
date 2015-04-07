@@ -45,7 +45,7 @@ class Client implements ClientInterface {
    * {@inheritdoc}
    */
   public function get($path, array $options = array()) {
-    $this->client->get($path, $options);
+    return $this->client->get($path, $options);
   }
 
   /**
