@@ -24,6 +24,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
    * Set up the testing environment.
    */
   public function setUp() {
+    parent::setUp();
     $base_url = 'http://example.theplatform.com/f/';
     $guzzle_client = new Client(array(
         'base_url' => $base_url
