@@ -30,7 +30,7 @@ interface ClientInterface {
    * @return Object|Bag
    *   An array of results.
    */
-  public function get(array $options = array());
+  public function fetch(array $options = array());
 
   /**
    * Returns the number of elements for the requested feed

@@ -151,7 +151,7 @@ class Client implements ClientInterface {
   /**
    * {@inheritdoc}
    */
-  public function get(array $options = array()) {
+  public function fetch(array $options = array()) {
     $options += array('query' => $this->queryParams);
     $response = $this->client->get($this->buildPath(), $options);
     return $this->client->parseBody($response);
@@ -166,7 +166,7 @@ class Client implements ClientInterface {
     $query_params->add('count', TRUE);
     $options = array('query' => $query_params);
 
-    $result = $this->get($options);
+    $result = $this->fetch($options);
     return $result['totalResults'];
   }
 
@@ -181,7 +181,8 @@ class Client implements ClientInterface {
    */
   protected function buildPath() {
     if (!empty($this->ids) && $this->guids) {
-      // If there is information about the IDs and GUIDs, then throw an exception.
+      // If there is information about both the IDs and GUIDs, then throw an
+      // exception.
       throw new MpxException(sprintf('Cannot provide IDs and GUIDs for the %s client.', __CLASS__));
     }
     $path_parts[] = $this->accountPid;
