@@ -29,13 +29,6 @@ class Client implements ClientInterface {
   protected $client;
 
   /**
-   * Base feed URL.
-   *
-   * @var Url
-   */
-  protected $baseUrl;
-
-  /**
    * The Account.pid of the account that owns the feed.
    *
    * @see http://help.theplatform.com/display/wsf2/Account.pid
@@ -122,7 +115,6 @@ class Client implements ClientInterface {
    * Constructs a Client object.
    *
    * @param MpxClientInterface $client
-   * @param Url $baseUrl
    * @param $accountPid
    * @param $feedPid
    * @param $feedType
@@ -132,10 +124,8 @@ class Client implements ClientInterface {
    * @param $guids
    * @param $seoTerms
    */
-  public function __construct(MpxClientInterface $client, Url $baseUrl, $accountPid, $feedPid, $feedType = NULL, $feed = FALSE, $ids = array(), $ownerId = NULL, $guids = array(), $seoTerms = array()) {
+  public function __construct(MpxClientInterface $client, $accountPid, $feedPid, $feedType = NULL, $feed = FALSE, $ids = array(), $ownerId = NULL, $guids = array(), $seoTerms = array()) {
     $this->client = $client;
-    $this->baseUrl = $baseUrl;
-    $this->client->setBaseUrl($baseUrl);
     $this->accountPid = $accountPid;
     $this->feedPid = $feedPid;
     $this->feedType = $feedType;
@@ -156,7 +146,7 @@ class Client implements ClientInterface {
     $owner_id = $container['owner_id'] ? $container['owner_id'] : NULL;
     $guids = $container['guids'] ? $container['guids'] : NULL;
     $seo_terms = $container['seo_terms'] ? $container['seo_terms'] : NULL;
-    return new static($container['client'], $container['base_url'], $container['account_pid'], $container['feed_pid'], $feed_type, $feed, $ids, $owner_id, $guids, $seo_terms);
+    return new static($container['client'], $container['account_pid'], $container['feed_pid'], $feed_type, $feed, $ids, $owner_id, $guids, $seo_terms);
   }
 
   /**
@@ -189,19 +179,22 @@ class Client implements ClientInterface {
       // If there is information about the IDs and GUIDs, then throw an exception.
       throw new MpxException(sprintf('Cannot provide IDs and GUIDs for the %s client.', __CLASS__));
     }
-    $path = $this->accountPid;
-    $path .= $this->feedPid;
-    $path .= $this->feedType ? $this->feedType : '';
-    $path .= $this->feed ? 'feed' : '';
-    $path .= $this->ids ? implode(',', $this->ids) : '';
+    $path_parts[] = $this->accountPid;
+    $path_parts[] = $this->feedPid;
+    $path_parts[] = $this->feedType ? $this->feedType : NULL;
+    $path_parts[] = $this->feed ? 'feed' : NULL;
+    $path_parts[] = $this->ids ? implode(',', $this->ids) : NULL;
     if ($this->guids) {
-      $path .= 'guid/';
-      $path .= $this->accountPid ? $this->accountPid : '-';
-      $path .= implode(',', $this->guids);
+      $path_parts[] = 'guid/';
+      $path_parts[] = $this->accountPid ? $this->accountPid : '-';
+      $path_parts[] = implode(',', $this->guids);
     }
-    $path .= $this->seoTerms ? implode(',', $this->seoTerms) : '';
+    $path_parts[] = $this->seoTerms ? implode(',', $this->seoTerms) : NULL;
 
-    return $path;
+    // Remove all the empty parts.
+    $path_parts = array_filter($path_parts);
+
+    return implode('/', $path_parts);
   }
 
 }
