@@ -25,7 +25,7 @@ interface ClientInterface {
   /**
    * Gets the contents of the feed.
    *
-   * @return array
+   * @return Object|Bag
    *   An array of results.
    */
   public function get();
