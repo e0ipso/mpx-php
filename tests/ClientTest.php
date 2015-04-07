@@ -1,13 +1,11 @@
 <?php
+
 /**
- * Created by PhpStorm.
- * User: e0ipso
- * Date: 07/04/15
- * Time: 18:42
+ * @file
+ * Contains \MpxTest\ClientTest.
  */
 
-namespace MpxText;
-
+namespace MpxTest;
 
 use GuzzleHttp\Client;
 use Mpx\Client as MpxClient;
