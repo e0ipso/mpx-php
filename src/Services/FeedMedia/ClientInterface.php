@@ -6,8 +6,8 @@
 
 namespace Mpx\Services\FeedMedia;
 
-use Mpx\MpxException;
 use Pimple\Container;
+use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 
 interface ClientInterface {
 
@@ -42,5 +42,25 @@ interface ClientInterface {
    * @return int
    */
   public function count(array $options = array());
+
+  /**
+   * Gets the underlying guzzle client.
+   *
+   * Primarily used to modify the client for response mocking during testing.
+   *
+   * @return GuzzleClientInterface
+   *   The client.
+   */
+  public function getGuzzleClient();
+
+  /**
+   * Set configuration key.
+   *
+   * @param string $key
+   *   The key for the configuration element.
+   * @param mixed $value
+   *   The value for the configuration element.
+   */
+  public function setConfig($key, $value);
 
 }

@@ -7,6 +7,7 @@
 namespace Mpx;
 
 use GuzzleHttp\Message\Response;
+use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 
 interface ClientInterface {
 
@@ -48,5 +49,15 @@ interface ClientInterface {
    *   The defaults array.
    */
   public function getDefaults();
+
+  /**
+   * Gets the underlying guzzle client.
+   *
+   * Primarily used to modify the client for response mocking during testing.
+   *
+   * @return GuzzleClientInterface
+   *   The client.
+   */
+  public function getGuzzleClient();
 
 }

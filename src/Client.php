@@ -60,12 +60,12 @@ class Client implements ClientInterface {
       $output = $response->json();
     }
     if ($format == $this::FORMAT_ATOM || $format == $this::FORMAT_RSS) {
-      $output = $response->xml();
+      $output = $this->xmlToArray($response->xml());
     }
     if ($output['isException']) {
       throw new MpxException(sprintf('Exception returned: %s', print_r($output, TRUE)));
     }
-    if ($output) {
+    if (isset($output)) {
       return $output;
     }
     throw new MpxException('Custom formats are not supported.');
@@ -76,6 +76,32 @@ class Client implements ClientInterface {
    */
   public function getDefaults() {
     return $this->defaults;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getGuzzleClient() {
+    return $this->client;
+  }
+
+  /**
+   * Converts a SimpleXMLElement to an array.
+   *
+   * @param \SimpleXMLElement $xml_object
+   *   The object to convert.
+   * @param array $out
+   *   Temporary array, used for recursion.
+   *
+   * @return array
+   *   The transformed array.
+   */
+  protected function xmlToArray(\SimpleXMLElement $xml_object, array $out = array ()) {
+    foreach ((array) $xml_object as $index => $node ) {
+      $out[$index] = (is_object($node)) ? $this->xmlToArray($node) : $node;
+    }
+
+    return $out;
   }
 
 }

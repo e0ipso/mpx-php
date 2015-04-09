@@ -187,6 +187,20 @@ class Client implements ClientInterface {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function getGuzzleClient() {
+    return $this->client->getGuzzleClient();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setConfig($key, $value) {
+    $this->{$key} = $value;
+  }
+
+  /**
    * Builds the path to request based on the internal parameters.
    *
    * @throws MpxException
