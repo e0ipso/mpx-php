@@ -27,7 +27,7 @@ class FeedMediaClientTest extends \PHPUnit_Framework_TestCase {
     parent::setUp();
     $container = new Container();
 
-    $container['base_url'] = 'http://feed.theplatform.com/f/';
+    $container['base_url'] = 'https://example.com';
     $container['guzzle_client'] = function ($c) {
       return new Client(array(
           'base_url' => $c['base_url'])
