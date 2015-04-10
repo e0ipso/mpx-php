@@ -2,10 +2,10 @@
 
 /**
  * @file
- * Contains \MpxTest\ClientTest.
+ * Contains \Mpx\Test\ClientTest.
  */
 
-namespace MpxTest;
+namespace Mpx\Test;
 
 use GuzzleHttp\Client;
 use Mpx\Client as MpxClient;

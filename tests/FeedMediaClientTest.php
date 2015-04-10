@@ -2,10 +2,10 @@
 
 /**
  * @file
- * Contains \MpxTest\FeedMediaClientTest.
+ * Contains \Mpx\Test\FeedMediaClientTest.
  */
 
-namespace MpxTest;
+namespace Mpx\Test;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Message\Response;
