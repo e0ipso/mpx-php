@@ -63,7 +63,7 @@ class Client implements ClientInterface {
       $output = $this->xmlToArray($response->xml());
     }
     if ($output['isException']) {
-      throw new MpxException(sprintf('Exception returned: %s', print_r($output, TRUE)));
+      throw new MpxException(sprintf('Exception returned: %s', print_r($output, TRUE)), $output['responseCode']);
     }
     if (isset($output)) {
       return $output;
