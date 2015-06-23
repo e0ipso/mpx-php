@@ -59,16 +59,18 @@ class Client implements ClientInterface {
     if ($format == $this::FORMAT_JSON || $format == $this::FORMAT_CJSON) {
       $output = $response->json();
     }
-    if ($format == $this::FORMAT_ATOM || $format == $this::FORMAT_RSS) {
+    elseif ($format == $this::FORMAT_ATOM || $format == $this::FORMAT_RSS) {
       $output = $this->xmlToArray($response->xml());
     }
-    if ($output['isException']) {
+    else {
+      throw new MpxException(sprintf('Custom formats (%s) are not supported.',
+        is_string($format) ? $format : gettype($format)
+      ));
+    }
+    if (isset($output['isException'])) {
       throw new MpxException(sprintf('Exception returned: %s', print_r($output, TRUE)), $output['responseCode']);
     }
-    if (isset($output)) {
-      return $output;
-    }
-    throw new MpxException('Custom formats are not supported.');
+    return $output;
   }
 
   /**
