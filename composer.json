@@ -9,6 +9,9 @@
       "email": "mateu.aguilo.bosch@gmail.com"
     }
   ],
+  "scripts": {
+    "test": "phpunit"
+  },
   "require": {
     "guzzlehttp/guzzle": "5.*",
     "pimple/pimple": "3.*"
